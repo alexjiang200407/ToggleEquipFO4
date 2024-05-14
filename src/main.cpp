@@ -1,4 +1,4 @@
-#include <spdlog/sinks/basic_file_sink.h>
+#include "ToggleEquip.h"
 
 void InitializeLog()
 {
@@ -47,7 +47,10 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_f
 {
 	F4SE::Init(a_f4se);
 	InitializeLog();
-	logger::info("hello world!");
+
+	logger::info("ToggleItems has been initialized by F4SE bitch");
+
+	ToggleEquip::GetSingleton()->RegisterHooks();
 
 	return true;
 }

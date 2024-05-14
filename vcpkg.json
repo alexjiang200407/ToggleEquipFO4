@@ -5,9 +5,16 @@
   "homepage": "https://github.com/Ryan-rsm-McKenzie/CommonLibF4",
   "license": "MIT",
   "dependencies": [
+    "args",
     "boost-stl-interfaces",
+    "catch2",
     "fmt",
+    "frozen",
+    "nowide",
+    "robin-hood-hashing",
     "rsm-mmio",
-    "spdlog"
+    "spdlog",
+    "srell",
+    "xbyak"
   ]
 }
