@@ -11,11 +11,13 @@ public:
 	static ToggleEquip* GetSingleton();
 	
 	void RegisterHooks();
+	void GameLoaded();
 
-	struct EquipEventDispatcherHook
+
+	struct CantEquipHook
 	{
-		static void thunk(RE::TESEquipEvent& a_event);
-		static inline REL::Relocation<decltype(&thunk)> func;
+		static bool thunk(RE::ActorEquipManager* a_self, RE::Actor& a_actor, RE::InventoryInterface::Handle& a_inventory_intfc, uint32_t unk);
+		static inline REL::Relocation<decltype(thunk)> func;
 	};
 
 	virtual RE::BSEventNotifyControl ProcessEvent(const RE::TESEquipEvent& evn, RE::BSTEventSource<RE::TESEquipEvent>*) override;

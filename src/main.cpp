@@ -13,13 +13,26 @@ void InitializeLog()
 
 	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
 
-	log->set_level(spdlog::level::info);
+	log->set_level(spdlog::level::trace);
 	log->flush_on(spdlog::level::info);
 
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("[%H:%M:%S:%e] %v"s);
 
 	logger::info(FMT_STRING("{} v{}"), Version::PROJECT, Version::NAME);
+}
+
+void MessageHandler(F4SE::MessagingInterface::Message* a_message)
+{
+	switch (a_message->type) {
+	case F4SE::MessagingInterface::kGameDataReady:
+		break;
+	case F4SE::MessagingInterface::kPostLoadGame:
+		ToggleEquip::GetSingleton()->GameLoaded();
+		break;
+	default:
+		break;
+	}
 }
 
 
@@ -51,6 +64,8 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_f
 	logger::info("ToggleItems has been initialized by F4SE bitch");
 
 	ToggleEquip::GetSingleton()->RegisterHooks();
+	auto messaging = F4SE::GetMessagingInterface();
+	messaging->RegisterListener(MessageHandler);
 
 	return true;
 }
