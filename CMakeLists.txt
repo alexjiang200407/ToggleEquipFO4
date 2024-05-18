@@ -33,7 +33,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE 
 
 project(
 	ToggleEquip
-	VERSION 0.0.1
+	VERSION 0.1.0
 	LANGUAGES CXX
 )
 

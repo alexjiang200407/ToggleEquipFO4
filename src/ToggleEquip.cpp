@@ -12,52 +12,50 @@ void ToggleEquip::RegisterHooks()
 
 bool ToggleEquip::CanEquipHook::thunk(RE::ActorEquipManager* a_self, RE::Actor& a_actor, RE::InventoryInterface::Handle& item_handle, uint32_t unk)
 {
-	bool retVal = func(a_self, a_actor, item_handle, unk);
+	// Can equip check if already equipped
+	const RE::BGSInventoryItem* item = RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem(item_handle.id);
+	const bool isAlreadyEquipped = item->stackData->IsEquipped();
+	const bool retVal = func(a_self, a_actor, item_handle, unk);
 
 	logger::trace("Default return {}", retVal? "true" : "false");
 
 	// Cant equip due to some reason, true return means can't equip
-	if (retVal == true)
+	if (retVal)
 		return retVal;
 
-	// Can equip check if already equipped
-	const RE::BGSInventoryItem* item = RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem(item_handle.id);
-	const bool isAlreadyEquipped = item->stackData->IsEquipped();
+	if (!isAlreadyEquipped)
+		return retVal;
 
 	logger::trace("Is already equipped? {}", item->stackData->IsEquipped()? "YES!" : "no skipping...");
 
 	// Toggle the equip if already equipped
-	if (isAlreadyEquipped) 
+	logger::info("Toggle equip 0x{:X}, Editor ID {}", uintptr_t(item->object->GetFormID()), item->object->GetFormEditorID());
+
+	const RE::BSAutoReadLock l{ a_actor.inventoryList->rwLock };
+
+	// For each of the 44 slots check if object is same
+	for (int i = 0; i < static_cast<uint32_t>(RE::BIPED_OBJECT::kTotal); i++)
 	{
-		logger::info("Toggle equip 0x{:X}, Editor ID {}", uintptr_t(item->object->GetFormID()), item->object->GetFormEditorID());
+		const auto& targetItem = a_actor.biped->object[i].parent;
 
-		const RE::BSAutoReadLock l{ a_actor.inventoryList->rwLock };
-
-		// For each of the 44 slots check if object is same
-		for (int i = 0; i < static_cast<uint32_t>(RE::BIPED_OBJECT::kTotal); i++)
+		if (!targetItem.object)
 		{
-			item->object->As<RE::BGSBipedObjectForm>();
-
-			const auto& targetItem = a_actor.biped->object[i].parent;
-
-			if (!targetItem.object)
-			{
-				logger::trace("targetItem object not found for slot {}", i);
-				continue;
-			}
-
-			if (targetItem.object->GetFilledSlots() != item->object->GetFilledSlots())
-			{
-				logger::trace("Not the same object");
-				continue;
-			}
-
-			logger::info("Found same object at slot index {}", i);
-
-			auto inst = RE::BGSObjectInstance(targetItem.object, targetItem.instanceData.get());
-			a_self->UnequipObject(&a_actor, &inst, 0xFFFFFFFF, nullptr, 0, true, true, true, true, nullptr);
+			logger::trace("targetItem object not found for slot {}", i);
+			continue;
 		}
+
+		if (targetItem.object->GetFilledSlots() != item->object->GetFilledSlots())
+		{
+			logger::trace("Not the same object");
+			continue;
+		}
+
+		logger::info("Found same object at slot index {}", i);
+
+		auto inst = RE::BGSObjectInstance(targetItem.object, targetItem.instanceData.get());
+		a_self->UnequipObject(&a_actor, &inst, 0xFFFFFFFF, nullptr, 0, true, true, true, true, nullptr);
 	}
+
 	
 	return retVal;
 }
