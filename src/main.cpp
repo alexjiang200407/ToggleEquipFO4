@@ -1,4 +1,24 @@
 #include "ToggleEquip.h"
+#include <string>
+
+spdlog::level::level_enum GetLogLevel()
+{
+	CSimpleIniA ini;
+	ini.SetUnicode();
+
+	if (ini.LoadFile("./Data/F4SE/Plugins/ToggleEquip.ini") < 0)
+		return spdlog::level::level_enum::trace;
+
+	std::string logLevelStr = ini.GetValue("Debug", "logLevel", "0");
+	size_t digits;
+
+	int logLevel = std::stoi(logLevelStr, &digits);
+
+	if (digits != logLevelStr.size() || logLevel > spdlog::level::level_enum::n_levels || logLevel < 0)
+		return spdlog::level::level_enum::trace;
+
+	return static_cast<spdlog::level::level_enum>(logLevel);
+}
 
 void InitializeLog()
 {
@@ -13,26 +33,15 @@ void InitializeLog()
 
 	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
 
-	log->set_level(spdlog::level::trace);
-	log->flush_on(spdlog::level::info);
+	auto logLevel = GetLogLevel();
+
+	log->set_level(logLevel);
+	log->flush_on(logLevel);
 
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("[%H:%M:%S:%e] %v"s);
 
 	logger::info(FMT_STRING("{} v{}"), Version::PROJECT, Version::NAME);
-}
-
-void MessageHandler(F4SE::MessagingInterface::Message* a_message)
-{
-	switch (a_message->type) {
-	case F4SE::MessagingInterface::kGameDataReady:
-		break;
-	case F4SE::MessagingInterface::kPostLoadGame:
-		ToggleEquip::GetSingleton()->GameLoaded();
-		break;
-	default:
-		break;
-	}
 }
 
 
@@ -63,9 +72,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_f
 
 	logger::info("ToggleItems has been initialized by F4SE bitch");
 
-	ToggleEquip::GetSingleton()->RegisterHooks();
-	auto messaging = F4SE::GetMessagingInterface();
-	messaging->RegisterListener(MessageHandler);
+	ToggleEquip::RegisterHooks();
 
 	return true;
 }

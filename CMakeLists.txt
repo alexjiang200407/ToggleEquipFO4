@@ -86,6 +86,7 @@ endif ()
 
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
+find_path(SIMPLEINI_INCLUDE_DIRS "ConvertUTF.c")
 
 # ---- Add source files ----
 
@@ -128,6 +129,7 @@ target_include_directories(
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/include
+		${SIMPLEINI_INCLUDE_DIRS}
 )
 
 target_link_libraries(

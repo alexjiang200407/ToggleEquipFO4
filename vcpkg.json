@@ -15,6 +15,7 @@
     "rsm-mmio",
     "spdlog",
     "srell",
-    "xbyak"
+    "xbyak",
+    "simpleini"
   ]
 }
