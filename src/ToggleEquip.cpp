@@ -9,15 +9,7 @@ ToggleEquip* ToggleEquip::GetSingleton()
 void ToggleEquip::RegisterHooks()
 {
 	logger::info("Installing hooks");
-
-	//REL::Relocation<std::uintptr_t> target1{ REL::ID(702912), 0x0 };  // ActorEquipManager::Unequip<SpellItem*,MagicEquipParams>(Actor*,SpellItem*,MagicEquipParams&)
-	//REL::Relocation<std::uintptr_t> target2{ REL::ID(134742), 0x0 };  // Actor::ShouldQueueEquipObject(TESBoundObject*)
-	//REL::Relocation<std::uintptr_t> target3{ REL::ID(691570), 0x0 };  // Actor::PollItemEquip(bool)
 	REL::Relocation<std::uintptr_t> target{ REL::ID(332489), 0x17A };  // ???
-
-	//logger::info("{:X}", target1.address());
-	//logger::info("{:X}", target2.address());
-	//logger::info("{:X}", target3.address());
 	logger::info("Writing to address {:X}", target.address());
 	stl::write_thunk_call<CantEquipHook>(target.address());
 
@@ -27,36 +19,7 @@ void ToggleEquip::RegisterHooks()
 
 void ToggleEquip::GameLoaded()
 {
-	RE::EquipEventSource::GetSingleton()->RegisterSink(this);
-
-	RE::TESEquipEvent event{};
-	event.a = RE::PlayerCharacter::GetSingleton();
-
 	logger::info("Game loaded");
-}
-
-RE::BSEventNotifyControl ToggleEquip::ProcessEvent(const RE::TESEquipEvent& evn, RE::BSTEventSource<RE::TESEquipEvent>*)
-{
-	if (evn.a != RE::PlayerCharacter::GetSingleton())
-		return RE::BSEventNotifyControl::kContinue;
-
-	//logger::info("Player {} something!", evn.isEquip ? "equipped" : "unequipped");
-
-	//logger::info("0x{:x} 0x{:x} {}", evn.formId, evn.refFormID, evn.unk10);
-
-	return RE::BSEventNotifyControl::kContinue;
-}
-
-RE::BSEventNotifyControl ToggleEquip::ProcessEvent(const RE::BGSInventoryListEvent::Event& evn, RE::BSTEventSource<RE::BGSInventoryListEvent::Event>*)
-{
-	if (evn.owner != RE::PlayerCharacter::GetSingleton()->GetHandle())
-		return RE::BSEventNotifyControl::kContinue;
-		
-	logger::info("Player inventory event");
-
-
-
-	return RE::BSEventNotifyControl::kContinue;
 }
 
 bool ToggleEquip::CantEquipHook::thunk(RE::ActorEquipManager* a_self, RE::Actor& a_actor, RE::InventoryInterface::Handle& item_handle, uint32_t unk)
@@ -78,20 +41,44 @@ bool ToggleEquip::CantEquipHook::thunk(RE::ActorEquipManager* a_self, RE::Actor&
 	logger::info("0x{:X}", uintptr_t(item->object->GetFormID()));
 	logger::info("Is already equipped? {}", item->stackData->IsEquipped()? "YES!" : "no");
 
-	item->object->GetBaseInstanceData();
-	RE::BGSObjectInstance* f = RE::fallout_cast<RE::BGSObjectInstance*>((RE::TESObjectREFR*)nullptr);
 
-	if (isAlreadyEquipped)
-	{
-		a_self->UnequipObject(&a_actor, , )
+	if (isAlreadyEquipped) 
+	{			
+		auto slotsFilledMask = item->object->GetFilledSlots();
+		uint8_t slotsUsedMask = item->stackData->flags.underlying() & uint16_t(RE::BGSInventoryItem::Stack::Flag::kSlotMask);
+
+		logger::info("Slot usage: 0b{:03b}", slotsUsedMask);
+		
+		logger::info("slotsFilledMask 0x{:06X}", slotsFilledMask);
+
+		// For each slot from 3 to 1
+		for (int i = 0; i < static_cast<uint32_t>(RE::BIPED_OBJECT::kTotal); i++)
+		{
+			// Slot is not being used
+			//if (!((slotsUsedMask >> (1 * i)) & 0x1))
+			//	continue;
+
+			item->object->As<RE::BGSBipedObjectForm>();
+
+			const auto& targetItem = a_actor.biped->object[i].parent;
+
+
+			if (!targetItem.object)
+			{
+				logger::error("targetItem.object not found");
+				continue;
+			}
+
+			if (targetItem.object->GetFilledSlots() != item->object->GetFilledSlots())
+			{
+				logger::info("Not the same object");
+				continue;
+			}
+
+			auto inst = RE::BGSObjectInstance(targetItem.object, targetItem.instanceData.get());
+			a_self->UnequipObject(&a_actor, &inst, 0xFFFFFFFF, nullptr, 0, true, true, true, true, nullptr);
+		}
 	}
 	
-
-	
-
-	//a_actor.currentProcess->middleHigh->equippedItemsLock.unlock();
-
-
-
 	return retVal;
 }
