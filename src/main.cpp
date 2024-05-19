@@ -1,12 +1,17 @@
 #include "ToggleEquip.h"
 #include <string>
+#include "Version.h"
+
 
 spdlog::level::level_enum GetLogLevel()
 {
 	CSimpleIniA ini;
 	ini.SetUnicode();
+	std::ostringstream oss;
 
-	if (ini.LoadFile("./Data/F4SE/Plugins/ToggleEquip.ini") < 0)
+	oss << "./Data/F4SE/Plugins/" << Version::PROJECT << ".ini";
+
+	if (ini.LoadFile(oss.str().c_str()) < 0)
 		return spdlog::level::level_enum::trace;
 
 	std::string logLevelStr = ini.GetValue("Debug", "logLevel", "0");
@@ -18,6 +23,16 @@ spdlog::level::level_enum GetLogLevel()
 		return spdlog::level::level_enum::trace;
 
 	return static_cast<spdlog::level::level_enum>(logLevel);
+}
+
+void MessageHandler(F4SE::MessagingInterface::Message* a_msg)
+{
+	switch (a_msg->type) {
+	case F4SE::MessagingInterface::kGameDataReady:
+		ToggleEquip::RegisterEvents();
+	default:
+		break;
+	}
 }
 
 void InitializeLog()
@@ -73,6 +88,8 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_f
 	logger::info("ToggleItems has been initialized by F4SE bitch");
 
 	ToggleEquip::RegisterHooks();
+
+	F4SE::GetMessagingInterface()->RegisterListener(MessageHandler);
 
 	return true;
 }
