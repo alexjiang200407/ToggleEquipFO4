@@ -25,16 +25,6 @@ spdlog::level::level_enum GetLogLevel()
 	return static_cast<spdlog::level::level_enum>(logLevel);
 }
 
-void MessageHandler(F4SE::MessagingInterface::Message* a_msg)
-{
-	switch (a_msg->type) {
-	case F4SE::MessagingInterface::kGameDataReady:
-		ToggleEquip::RegisterEvents();
-	default:
-		break;
-	}
-}
-
 void InitializeLog()
 {
 	auto path = logger::log_directory();
@@ -88,8 +78,6 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_f
 	logger::info("ToggleItems has been initialized by F4SE bitch");
 
 	ToggleEquip::RegisterHooks();
-
-	F4SE::GetMessagingInterface()->RegisterListener(MessageHandler);
 
 	return true;
 }

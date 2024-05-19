@@ -1,13 +1,9 @@
 #pragma once
 
-class ToggleEquip :
-	public RE::BSTEventSink<RE::TESEquipEvent>
+namespace ToggleEquip
 {	
-public:
-	static void RegisterHooks();
-	static void RegisterEvents();
+	void RegisterHooks();
 
-private:
 	struct ToggleEquipItemHook
 	{
 		static bool thunk(
@@ -20,9 +16,4 @@ private:
 			bool a_unk);
 		static inline REL::Relocation<decltype(thunk)> func;
 	};
-
-	RE::BSEventNotifyControl ProcessEvent(const RE::TESEquipEvent& a_event, RE::BSTEventSource<RE::TESEquipEvent>*) override;
-
-private:
-	static ToggleEquip singleton;
 };

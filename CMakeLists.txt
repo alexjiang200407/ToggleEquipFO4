@@ -33,7 +33,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE 
 
 project(
 	ToggleEquip
-	VERSION 0.1.0
+	VERSION 1.0.0
 	LANGUAGES CXX
 )
 
@@ -180,14 +180,10 @@ if (COPY_BUILD)
 	if (DEFINED Fallout4Path)
 		message("Copying build to: ${Fallout4Path}/${PROJECT_NAME}/F4SE/Plugins/")
 
-		#add_custom_target(build-time-make-directory ALL
-			#COMMAND ${CMAKE_COMMAND} -E make_directory ${Fallout4Path}/${PROJECT_NAME}/F4SE/Plugins/)
-
 		add_custom_command(
 			TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${Fallout4Path}/${PROJECT_NAME}/F4SE/Plugins/
-			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> ${Fallout4Path}/${PROJECT_NAME}/F4SE/Plugins/
 		)
 	else ()
 		message(
@@ -195,6 +191,16 @@ if (COPY_BUILD)
 			"Variable Fallout4Path is not defined. Skipping post-build copy command."
 		)
 	endif ()
+
+
+
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_custom_command(
+            TARGET "${PROJECT_NAME}"
+            POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> ${Fallout4Path}/${PROJECT_NAME}/F4SE/Plugins/
+        )
+    endif()
 endif ()
 
 # ---- Build artifacts ----

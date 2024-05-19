@@ -1,8 +1,5 @@
 #include "ToggleEquip.h"
 
-
-ToggleEquip ToggleEquip::singleton;
-
 void ToggleEquip::RegisterHooks()
 {
 	logger::info("Installing hooks");
@@ -12,30 +9,6 @@ void ToggleEquip::RegisterHooks()
 	
 	logger::info("Writing to address {:X}", target.address());
 	logger::info("Installed ToggleEquip dispatcher hook");
-}
-
-RE::BSEventNotifyControl ToggleEquip::ProcessEvent(const RE::TESEquipEvent& a_event, RE::BSTEventSource<RE::TESEquipEvent>*)
-{
-	if (a_event.a != RE::PlayerCharacter::GetSingleton())
-		return RE::BSEventNotifyControl::kContinue;
-
-	auto* item = RE::TESForm::GetFormByID(a_event.formId);
-
-	if (!item)
-	{
-		logger::error("Could not find item with id 0x{:X}", a_event.formId);
-		return RE::BSEventNotifyControl::kContinue;
-	}
-
-	logger::info("Processing {} event for object 0x{:X} {}", a_event.isEquip ? "EQUIP" : "UNEQUIP", a_event.formId, item->GetFormEditorID());
-
-	return RE::BSEventNotifyControl::kContinue;
-}
-
-void ToggleEquip::RegisterEvents()
-{
-	logger::info("Registering Event sink");
-	RE::EquipEventSource::GetSingleton()->RegisterSink(&singleton);
 }
 
 bool ToggleEquip::ToggleEquipItemHook::thunk(
@@ -52,11 +25,17 @@ bool ToggleEquip::ToggleEquipItemHook::thunk(
 		return func(a_self, a_actor, a_itemHandle, a_stackID, a_equipSlot, a_allowUnequip, a_unk);	
 
 	bool retVal = func(a_self, a_actor, a_itemHandle, a_stackID, a_equipSlot, true, a_unk);	
+	const RE::BGSInventoryItem* item = RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem(a_itemHandle.id);
+
 	if (!retVal)
 	{
-		const RE::BGSInventoryItem* item = RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem(a_itemHandle.id);
 		logger::warn("Could not toggleEquip item 0x{:X} with editor id {}", item->object->GetFormID(), item->object->GetFormEditorID());
 	}
+	else
+	{
+		logger::trace("toggleEquip item 0x{:X} with editor id {}", item->object->GetFormID(), item->object->GetFormEditorID());
+	}
+
 
 	return retVal;
 }
