@@ -9,5 +9,5 @@ ToggleEquip is a F4SE plugin that allows Fallout 4 players to toggle the equippe
 ## Environment Variables
 1. Set CommonLibF4Path to the path of 1.10.163 version of CommonLibF4
 2. Set CommonLibF4NGPath to the path of 1.10.984 version of CommonLibF4
-3. Set Fallout4Path to the installation path of 1.10.163 version of Fallout4
-4. Set Fallout4NGPath to the installation path of 1.10.984 version of Fallout4
+3. Set Fallout4Path to the data folder of 1.10.163 version of Fallout4
+4. Set Fallout4NGPath to the data folder of 1.10.984 version of Fallout4
