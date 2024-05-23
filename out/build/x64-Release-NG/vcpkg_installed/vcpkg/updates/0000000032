@@ -1,7 +1,0 @@
-Package: simpleini
-Version: 4.22
-Architecture: x64-windows-static-md
-Multi-Arch: same
-Abi: d1d3237a210ddaee74d44357fe655fe3c66ec9261bcb542fc663a14deee6a324
-Description: Cross-platform C++ library providing a simple API to read and write INI-style configuration files
-Status: install ok half-installed

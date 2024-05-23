@@ -1,8 +1,0 @@
-Package: args
-Version: 6.4.6
-Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
-Architecture: x64-windows-static-md
-Multi-Arch: same
-Abi: e3211490f0d9c0bec61fc8022a5ad8abe220367be404f684faf60210a3b3522e
-Description: A simple header-only C++ argument parser library.
-Status: install ok half-installed

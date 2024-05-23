@@ -1,8 +1,0 @@
-Package: rsm-mmio
-Version: 2.0.0
-Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
-Architecture: x64-windows-static-md
-Multi-Arch: same
-Abi: ae65c4232d949b495174b20d43d6f3d6062fd08d0d9b0df7ed5fb21b7b8a3fb4
-Description: A cross-platform memory-mapped io library for C++
-Status: install ok installed

@@ -1,8 +1,0 @@
-Package: frozen
-Version: 1.1.1
-Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
-Architecture: x64-windows-static-md
-Multi-Arch: same
-Abi: 26d3edde7d676cd0caadce3ed2181b43dccc2282795e9862e369e29caa8187a7
-Description: Header-only library that provides 0 cost initialization for immutable containers and various algorithms. Frozen provides:immutable (a.k.a. frozen), constexpr-compatible versions of std::set, std::unordered_set, std::map and std::unordered_map and 0-cost initialization version of std::search for frozen needles using Boyer-Moore or Knuth-Morris-Pratt algorithms.
-Status: install ok installed
