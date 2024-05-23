@@ -3,18 +3,31 @@ cmake_minimum_required(VERSION 3.21)
 # ---- Options ----
 
 option(COPY_BUILD "Copy the build output to the Fallout 4 directory." TRUE)
+option(NEXT_GEN "Compile for Next-Gen Update" TRUE)
 
 # ---- Cache build vars ----
 
-macro(set_from_environment VARIABLE)
-	if (NOT DEFINED ${VARIABLE} AND DEFINED ENV{${VARIABLE}})
-		set(${VARIABLE} $ENV{${VARIABLE}})
+macro(set_from_environment_ VARIABLE ENV_VAR)
+	if (NOT DEFINED ${VARIABLE} AND DEFINED ENV{${ENV_VAR}})
+		set(${VARIABLE} $ENV{${ENV_VAR}})
 	endif ()
 endmacro()
 
-set_from_environment(Fallout4Path)
+macro(set_from_environment VARIABLE)
+	set_from_environment_(${VARIABLE} ${VARIABLE})
+endmacro()
+
+macro(set_from_environment_fo4 VARIABLE NOT_NG NG)
+	if (NEXT_GEN)
+		set_from_environment_(${VARIABLE} ${NG})
+	else ()
+		set_from_environment_(${VARIABLE} ${NOT_NG})
+	endif ()
+endmacro()
+
+set_from_environment_fo4(Fallout4Path Fallout4Path Fallout4NGPath)
+set_from_environment_fo4(CommonLibF4Path CommonLibF4Path CommonLibF4NGPath)
 set_from_environment(VCPKG_ROOT)
-set_from_environment(CommonLibF4Path)
 
 if (DEFINED VCPKG_ROOT)
 	set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
@@ -66,6 +79,10 @@ if (MSVC)
 			/MP	# Build with Multiple Processes
 		)
 	endif ()
+endif ()
+
+if (NEXT_GEN)
+	add_compile_definitions(NEXT_GEN)
 endif ()
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)

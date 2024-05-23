@@ -43,4 +43,16 @@ namespace stl
 }
 
 
+#ifdef NEXT_GEN
+
+#	define OFFSET(pre_ng, ng) ng
+#	define RELOCATION_ID(pre_ng, ng) REL::ID(ng)
+
+#else
+
+#	define OFFSET(pre_ng, ng) pre_ng
+#	define RELOCATION_ID(pre_ng, ng) REL::ID(pre_ng)
+
+#endif // NEXT_GEN
+
 #include "Version.h"

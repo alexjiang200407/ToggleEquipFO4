@@ -4,7 +4,8 @@ void ToggleEquip::RegisterHooks()
 {
 	logger::info("Installing hooks");
 	
-	REL::Relocation<std::uintptr_t> target{ REL::ID(303130), 0x1B3 };  // ActorEquipManager::ToggleEquipItem()
+	REL::Relocation<std::uintptr_t> target{ RELOCATION_ID(303130, 2248744), OFFSET(0x1B3, 0x1AE) };  // ActorEquipManager::ToggleEquipItem()
+	
 	stl::write_thunk_call<ToggleEquipItemHook>(target.address());
 	
 	logger::info("Writing to address {:X}", target.address());
@@ -24,7 +25,10 @@ bool ToggleEquip::ToggleEquipItemHook::thunk(
 	if (a_actor != RE::PlayerCharacter::GetSingleton())
 		return func(a_self, a_actor, a_itemHandle, a_stackID, a_equipSlot, a_allowUnequip, a_unk);	
 
-	bool retVal = func(a_self, a_actor, a_itemHandle, a_stackID, a_equipSlot, true, a_unk);	
+	bool retVal = func(a_self, a_actor, a_itemHandle, a_stackID, a_equipSlot, true, a_unk);
+
+	// RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem REL::ID is yet to be found for CommonLibF4 NG
+#ifndef NEXT_GEN
 	const RE::BGSInventoryItem* item = RE::BGSInventoryInterface::GetSingleton()->RequestInventoryItem(a_itemHandle.id);
 
 	if (!retVal)
@@ -36,6 +40,7 @@ bool ToggleEquip::ToggleEquipItemHook::thunk(
 		logger::trace("toggleEquip item 0x{:X} with editor id {}", item->object->GetFormID(), item->object->GetFormEditorID());
 	}
 
+#endif
 
 	return retVal;
 }
