@@ -1,0 +1,110 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/frozen-x64-windows-static-md-1.1.1-5978a843-7708-449f-be0e-dbedab50f41b",
+  "name": "frozen:x64-windows-static-md@1.1.1 26d3edde7d676cd0caadce3ed2181b43dccc2282795e9862e369e29caa8187a7",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-7d353e869753e5609a1f1a057df3db8fd356e49d"
+    ],
+    "created": "2024-05-14T04:14:00Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "frozen",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "1.1.1",
+      "downloadLocation": "NOASSERTION",
+      "homepage": "https://github.com/serge-sans-paille/frozen",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Header-only library that provides 0 cost initialization for immutable containers and various algorithms. Frozen provides:immutable (a.k.a. frozen), constexpr-compatible versions of std::set, std::unordered_set, std::map and std::unordered_map and 0-cost initialization version of std::search for frozen needles using Boyer-Moore or Knuth-Morris-Pratt algorithms.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "frozen:x64-windows-static-md",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "26d3edde7d676cd0caadce3ed2181b43dccc2282795e9862e369e29caa8187a7",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "serge-sans-paille/frozen",
+      "downloadLocation": "git+https://github.com/serge-sans-paille/frozen@1.1.1",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "e22561a4e634e388e11f95b3005bc711e543013d314f6aaeda34befb2c673aea2d71a717d8822bc8fa85bdc8409945ba2ad91a1bac4f8cb5303080de01a5f60e"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Modding/vcpkg/ports/frozen/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "567fd43d412cebdeff479feb9bae9b97b27b19393ce513ddf8dd716152b5a43e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Modding/vcpkg/ports/frozen/vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e1bd50d914c2cd3d0c0359ae459639388902773b38f89e32c3c2b3b05514ac77"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

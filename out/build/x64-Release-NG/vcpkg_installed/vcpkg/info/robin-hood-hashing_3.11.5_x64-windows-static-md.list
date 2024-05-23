@@ -1,0 +1,11 @@
+x64-windows-static-md/
+x64-windows-static-md/include/
+x64-windows-static-md/include/robin_hood.h
+x64-windows-static-md/share/
+x64-windows-static-md/share/robin-hood-hashing/
+x64-windows-static-md/share/robin-hood-hashing/copyright
+x64-windows-static-md/share/robin-hood-hashing/vcpkg.spdx.json
+x64-windows-static-md/share/robin-hood-hashing/vcpkg_abi_info.txt
+x64-windows-static-md/share/robin_hood/
+x64-windows-static-md/share/robin_hood/robin_hood-targets.cmake
+x64-windows-static-md/share/robin_hood/robin_hoodConfig.cmake

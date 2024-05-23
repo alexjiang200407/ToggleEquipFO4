@@ -1,0 +1,10 @@
+x64-windows-static-md/
+x64-windows-static-md/include/
+x64-windows-static-md/include/srell.hpp
+x64-windows-static-md/include/srell_ucfdata2.hpp
+x64-windows-static-md/include/srell_updata.hpp
+x64-windows-static-md/share/
+x64-windows-static-md/share/srell/
+x64-windows-static-md/share/srell/copyright
+x64-windows-static-md/share/srell/vcpkg.spdx.json
+x64-windows-static-md/share/srell/vcpkg_abi_info.txt

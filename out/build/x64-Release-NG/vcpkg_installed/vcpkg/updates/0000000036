@@ -1,0 +1,7 @@
+Package: srell
+Version: 3.010
+Architecture: x64-windows-static-md
+Multi-Arch: same
+Abi: 5a000e6f2242e769222ba2c9647a6a11ed2b4d30c398ffbdfb23a32681108386
+Description: SRELL (std::regex-like library) is a regular expression template library for C++.
+Status: install ok half-installed

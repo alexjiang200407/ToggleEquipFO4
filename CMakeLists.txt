@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 
 # ---- Options ----
 
-option(COPY_BUILD "Copy the build output to the Fallout 4 directory." TRUE)
-option(NEXT_GEN "Compile for Next-Gen Update" TRUE)
+option(COPY_BUILD "Copy the build output to the Fallout 4 directory." OFF)
+option(NEXT_GEN "Compile for Next-Gen Update" OFF)
 
 # ---- Cache build vars ----
 
@@ -17,11 +17,11 @@ macro(set_from_environment VARIABLE)
 	set_from_environment_(${VARIABLE} ${VARIABLE})
 endmacro()
 
-macro(set_from_environment_fo4 VARIABLE NOT_NG NG)
+macro(set_from_environment_fo4 VARIABLE OG NG)
 	if (NEXT_GEN)
 		set_from_environment_(${VARIABLE} ${NG})
 	else ()
-		set_from_environment_(${VARIABLE} ${NOT_NG})
+		set_from_environment_(${VARIABLE} ${OG})
 	endif ()
 endmacro()
 
@@ -46,7 +46,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE 
 
 project(
 	ToggleEquip
-	VERSION 1.0.0
+	VERSION 1.1.0
 	LANGUAGES CXX
 )
 
@@ -93,6 +93,7 @@ set(Boost_USE_STATIC_LIBS ON)
 # ---- Dependencies ----
 
 if (DEFINED CommonLibF4Path AND NOT ${CommonLibF4Path} STREQUAL "" AND IS_DIRECTORY ${CommonLibF4Path})
+	message(${CommonLibF4Path})
 	add_subdirectory(${CommonLibF4Path} CommonLibF4)
 else ()
 	message(

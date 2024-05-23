@@ -1,0 +1,8 @@
+Package: nowide
+Version: 11.3.0
+Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: x64-windows-static-md
+Multi-Arch: same
+Abi: 2f3d61cd7537fe64ba641bb5df29119663cc7d8ac9d453f4b8ca3d535155284b
+Description: Boost nowide module (standalone)
+Status: install ok installed

@@ -1,0 +1,11 @@
+x64-windows-static-md/
+x64-windows-static-md/include/
+x64-windows-static-md/include/args.hxx
+x64-windows-static-md/share/
+x64-windows-static-md/share/args/
+x64-windows-static-md/share/args/args-config-version.cmake
+x64-windows-static-md/share/args/args-config.cmake
+x64-windows-static-md/share/args/copyright
+x64-windows-static-md/share/args/usage
+x64-windows-static-md/share/args/vcpkg.spdx.json
+x64-windows-static-md/share/args/vcpkg_abi_info.txt

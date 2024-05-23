@@ -45,13 +45,13 @@ namespace stl
 
 #ifdef NEXT_GEN
 
-#	define OFFSET(pre_ng, ng) ng
-#	define RELOCATION_ID(pre_ng, ng) REL::ID(ng)
+#	define OFFSET(og, ng) ng
+#	define RELOCATION_ID(og, ng) REL::ID(ng)
 
 #else
 
-#	define OFFSET(pre_ng, ng) pre_ng
-#	define RELOCATION_ID(pre_ng, ng) REL::ID(pre_ng)
+#	define OFFSET(og, ng) og
+#	define RELOCATION_ID(og, ng) REL::ID(og)
 
 #endif // NEXT_GEN
 
