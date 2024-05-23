@@ -57,5 +57,4 @@ test/test_runner
 ./out
 
 .vs
-/out/build/x64-Debug
-/out/build/x64-Release
+/out/
